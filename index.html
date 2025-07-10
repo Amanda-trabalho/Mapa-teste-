@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+     crossorigin=""/>
+    <style>
+        #map {
+            height: 180px; /* Altura ajustada */
+            width: 100%;
+        }
+    </style>
+    <title>Leaflet Map</title>
+</head>
+<body>
+    <h1>Localização no Mapa:</h1>
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin=""></script>
+
+    <script>
+        var map = L.map('map').setView([-22.9068, -43.1729], 13);
+
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Marcador original no Rio de Janeiro
+        L.marker([-22.9068, -43.1729]).addTo(map)
+            .bindPopup('Localização Atual')
+            .openPopup();
+
+        // Novo marcador em Londres
+        var marker = L.marker([51.5, -0.09]).addTo(map)
+            .bindPopup("<b>Hello world!</b><br>I am a popup.")
+            .openPopup();
+
+        // Círculo vermelho perto do marcador de Londres
+        var circle = L.circle([51.508, -0.11], {
+            color: 'red',
+            fillColor: '#f03',
+            fillOpacity: 0.5,
+            radius: 500
+        }).addTo(map)
+            .bindPopup("I am a circle.");
+
+        // Polígono em Londres
+        var polygon = L.polygon([
+            [51.509, -0.08],
+            [51.503, -0.06],
+            [51.51, -0.047]
+        ], {
+            color: 'blue',
+            fillColor: '#3f8',
+            fillOpacity: 0.5
+        }).addTo(map)
+            .bindPopup("I am a polygon.");
+
+        // Criando um popup que aparece ao clicar no mapa
+        var popupClick = L.popup();
+
+        function onMapPopupClick(e) {
+            popupClick
+                .setLatLng(e.latlng)
+                .setContent("You clicked the map at " + e.latlng.toString())
+                .openOn(map);
+        }
+
+        map.on('click', onMapPopupClick);
+
+        // Adicionando um popup independente na posição fixa [51.513, -0.09]
+        var popup = L.popup()
+            .setLatLng([51.513, -0.09])
+            .setContent("I am a standalone popup.")
+            .openOn(map);
+
+        // Função para exibir um alerta ao clicar no mapa
+        function onMapClick(e) {
+            alert("You clicked the map at " + e.latlng);
+        }
+
+        // Adiciona o evento de clique ao mapa
+        map.on('click', onMapClick);
+    </script>
+</body>
+</html>
